@@ -41,11 +41,23 @@ Install the opencode-mystatus plugin by following: https://raw.githubusercontent
 
 ## 使用方法
 
-使用 `/mystatus` 命令或调用 `mystatus` 工具：
+### 方式一：斜杠命令
+
+使用 `/mystatus` 命令获取完整的额度信息：
 
 ```
 /mystatus
 ```
+
+### 方式二：自然语言
+
+直接用自然语言提问，例如：
+
+- "帮我查看 Codex 的额度"
+- "我的 OpenAI 还剩多少额度？"
+- "查看 AI 账号状态"
+
+OpenCode 会自动调用 mystatus 工具来回答你的问题。
 
 ## 输出示例
 

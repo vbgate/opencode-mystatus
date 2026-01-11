@@ -41,11 +41,23 @@ Copy the plugin files to `.opencode/plugin/` in your project or `~/.config/openc
 
 ## Usage
 
-Use the `/mystatus` command or call the `mystatus` tool:
+### Option 1: Slash Command
+
+Use the `/mystatus` command to get complete quota information:
 
 ```
 /mystatus
 ```
+
+### Option 2: Natural Language
+
+Simply ask in natural language, for example:
+
+- "Check my OpenAI quota"
+- "How much Codex quota do I have left?"
+- "Show my AI account status"
+
+OpenCode will automatically use the mystatus tool to answer your question.
 
 ## Output Example
 
