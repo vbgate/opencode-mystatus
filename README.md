@@ -27,7 +27,7 @@ Install the opencode-mystatus plugin by following: https://raw.githubusercontent
 
 ### From npm
 
-Add to your `opencode.json`:
+Add to your `~/.config/opencode/opencode.json`:
 
 ```json
 {

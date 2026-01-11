@@ -27,7 +27,7 @@ Install the opencode-mystatus plugin by following: https://raw.githubusercontent
 
 ### 从 npm 安装
 
-在 `opencode.json` 中添加：
+在 `~/.config/opencode/opencode.json` 中添加：
 
 ```json
 {
