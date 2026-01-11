@@ -7,6 +7,8 @@
 
 [English](./README.md)
 
+![AI额度一键查](./assets/mystatus-banner-zh.jpeg)
+
 ## 支持的平台
 
 | 平台         | 账号类型          | 数据来源                                       |

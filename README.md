@@ -7,6 +7,8 @@ An [OpenCode](https://opencode.ai) plugin to query account quota usage for multi
 
 [中文文档](./README.zh-CN.md)
 
+![Check AI Quota in One Click](./assets/mystatus-banner-en.jpeg)
+
 ## Supported Platforms
 
 | Platform     | Account Type      | Data Source                                    |
