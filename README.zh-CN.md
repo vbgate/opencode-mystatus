@@ -206,40 +206,6 @@ bun run typecheck
 bun run build
 ```
 
-### 从本地安装
-
-```bash
-# 1. 构建并链接
-cd /path/to/opencode-mystatus
-npm run build && npm link
-
-# 2. 在 OpenCode 目录中链接
-cd ~/.local/share/opencode && npm link opencode-mystatus
-cd ~/.config/opencode && npm link opencode-mystatus
-
-# 3. 修改 ~/.config/opencode/opencode.json：移除版本号
-#    "opencode-mystatus@1.0.1" → "opencode-mystatus"
-
-# 4. 重启 OpenCode
-```
-
-### 从本地安装
-
-```bash
-# 1. 构建并链接
-cd /path/to/opencode-mystatus
-npm run build && npm link
-
-# 2. 在 OpenCode 目录中链接
-cd ~/.local/share/opencode && npm link opencode-mystatus
-cd ~/.config/opencode && npm link opencode-mystatus
-
-# 3. 修改 ~/.config/opencode/opencode.json：移除版本号
-#    "opencode-mystatus@1.0.1" → "opencode-mystatus"
-
-# 4. 重启 OpenCode
-```
-
 ## 许可证
 
 MIT
