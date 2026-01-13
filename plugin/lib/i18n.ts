@@ -95,6 +95,18 @@ const translations = {
     googleApiError: (status: number, text: string) =>
       `Google API 请求失败 (${status}): ${text}`,
     googleNoProjectId: "⚠️ 缺少 project_id，无法查询额度。",
+
+    // GitHub Copilot 相关
+    copilotTitle: "## GitHub Copilot 账号额度",
+    copilotApiError: (status: number, text: string) =>
+      `GitHub Copilot API 请求失败 (${status}): ${text}`,
+    premiumRequests: "Premium",
+    chatQuota: "Chat",
+    completionsQuota: "Completions",
+    overage: "超额使用",
+    overageRequests: "次请求",
+    quotaResets: "配额重置",
+    resetsSoon: "即将重置",
   },
   en: {
     // 时间单位
@@ -147,6 +159,18 @@ const translations = {
     googleApiError: (status: number, text: string) =>
       `Google API request failed (${status}): ${text}`,
     googleNoProjectId: "⚠️ Missing project_id, cannot query quota.",
+
+    // GitHub Copilot 相关
+    copilotTitle: "## GitHub Copilot Account Quota",
+    copilotApiError: (status: number, text: string) =>
+      `GitHub Copilot API request failed (${status}): ${text}`,
+    premiumRequests: "Premium",
+    chatQuota: "Chat",
+    completionsQuota: "Completions",
+    overage: "Overage",
+    overageRequests: "requests",
+    quotaResets: "Quota resets",
+    resetsSoon: "Resets soon",
   },
 } as const;
 

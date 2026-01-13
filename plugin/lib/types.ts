@@ -41,6 +41,16 @@ export interface ZhipuAuthData {
 }
 
 /**
+ * GitHub Copilot 认证数据
+ */
+export interface CopilotAuthData {
+  type: string;
+  refresh?: string;
+  access?: string;
+  expires?: number;
+}
+
+/**
  * Antigravity 账号（来自 ~/.config/opencode/antigravity-accounts.json）
  */
 export interface AntigravityAccount {
@@ -68,6 +78,7 @@ export interface AuthData {
   openai?: OpenAIAuthData;
   "zhipuai-coding-plan"?: ZhipuAuthData;
   "zai-coding-plan"?: ZhipuAuthData;
+  "github-copilot"?: CopilotAuthData;
 }
 
 // ============================================================================
