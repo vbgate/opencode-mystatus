@@ -51,6 +51,28 @@ export interface CopilotAuthData {
 }
 
 /**
+ * Copilot subscription tier
+ * See: https://docs.github.com/en/copilot/about-github-copilot/subscription-plans-for-github-copilot
+ */
+export type CopilotTier = "free" | "pro" | "pro+" | "business" | "enterprise";
+
+/**
+ * Copilot quota token configuration
+ * Stored in ~/.config/opencode/copilot-quota-token.json
+ *
+ * Users can create a fine-grained PAT with "Plan" read permission
+ * to enable quota checking via the public GitHub REST API.
+ */
+export interface CopilotQuotaConfig {
+  /** Fine-grained PAT with "Plan" read permission */
+  token: string;
+  /** GitHub username (for API calls) */
+  username: string;
+  /** Copilot subscription tier (determines monthly quota limit) */
+  tier: CopilotTier;
+}
+
+/**
  * Antigravity 账号（来自 ~/.config/opencode/antigravity-accounts.json）
  */
 export interface AntigravityAccount {

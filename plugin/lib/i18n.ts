@@ -107,6 +107,20 @@ const translations = {
     overageRequests: "次请求",
     quotaResets: "配额重置",
     resetsSoon: "即将重置",
+    modelBreakdown: "模型使用明细:",
+    billingPeriod: "计费周期",
+    copilotQuotaUnavailable:
+      "⚠️ GitHub Copilot 配额查询暂时不可用。\n" +
+      "OpenCode 的新 OAuth 集成不支持访问配额 API。",
+    copilotQuotaWorkaround:
+      "解决方案:\n" +
+      "1. 创建一个 fine-grained PAT (访问 https://github.com/settings/tokens?type=beta)\n" +
+      "2. 在 'Account permissions' 中将 'Plan' 设为 'Read-only'\n" +
+      "3. 创建配置文件 ~/.config/opencode/copilot-quota-token.json:\n" +
+      '   {"token": "github_pat_xxx...", "username": "你的用户名"}\n\n' +
+      "其他方法:\n" +
+      "• 在 VS Code 中点击状态栏的 Copilot 图标查看配额\n" +
+      "• 访问 https://github.com/settings/billing 查看使用情况",
   },
   en: {
     // 时间单位
@@ -171,6 +185,20 @@ const translations = {
     overageRequests: "requests",
     quotaResets: "Quota resets",
     resetsSoon: "Resets soon",
+    modelBreakdown: "Model breakdown:",
+    billingPeriod: "Period",
+    copilotQuotaUnavailable:
+      "⚠️ GitHub Copilot quota query unavailable.\n" +
+      "OpenCode's new OAuth integration doesn't support quota API access.",
+    copilotQuotaWorkaround:
+      "Solution:\n" +
+      "1. Create a fine-grained PAT (visit https://github.com/settings/tokens?type=beta)\n" +
+      "2. Under 'Account permissions', set 'Plan' to 'Read-only'\n" +
+      "3. Create config file ~/.config/opencode/copilot-quota-token.json:\n" +
+      '   {"token": "github_pat_xxx...", "username": "YourUsername"}\n\n' +
+      "Alternatives:\n" +
+      "• Click the Copilot icon in VS Code status bar to view quota\n" +
+      "• Visit https://github.com/settings/billing for usage info",
   },
 } as const;
 
