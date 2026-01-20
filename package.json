@@ -1,6 +1,6 @@
 {
   "name": "opencode-mystatus",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Check all your AI subscription quotas in one command. Supports OpenAI, Zhipu AI, Z.ai, and Google Antigravity. More platforms coming soon.",
   "type": "module",
   "main": "dist/plugin/mystatus.js",
