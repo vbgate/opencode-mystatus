@@ -88,7 +88,6 @@ interface BillingUsageResponse {
 // ============================================================================
 
 const GITHUB_API_BASE_URL = "https://api.github.com";
-const COPILOT_API_BASE_URL = "https://api.githubcopilot.com";
 
 // Config file path for user's fine-grained PAT
 const COPILOT_QUOTA_CONFIG_PATH = path.join(
