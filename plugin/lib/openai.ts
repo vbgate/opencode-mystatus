@@ -67,7 +67,8 @@ function parseJwt(token: string): JwtPayload | null {
     if (parts.length !== 3) return null;
     const payloadJson = base64UrlDecode(parts[1]);
     return JSON.parse(payloadJson) as JwtPayload;
-  } catch {
+  } catch (err) {
+    console.error("[OpenAI] Failed to parse JWT:", err);
     return null;
   }
 }

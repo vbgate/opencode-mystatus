@@ -145,7 +145,8 @@ function readQuotaConfig(): CopilotQuotaConfig | null {
     }
 
     return config;
-  } catch {
+  } catch (err) {
+    console.error("[Copilot] Failed to read quota config:", err);
     return null;
   }
 }
@@ -202,7 +203,8 @@ async function exchangeForCopilotToken(
 
     const tokenData: CopilotTokenResponse = await response.json();
     return tokenData.token;
-  } catch {
+  } catch (err) {
+    console.error("[Copilot] Token exchange failed:", err);
     return null;
   }
 }
