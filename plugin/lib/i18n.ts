@@ -117,7 +117,8 @@ const translations = {
       "1. 创建一个 fine-grained PAT (访问 https://github.com/settings/tokens?type=beta)\n" +
       "2. 在 'Account permissions' 中将 'Plan' 设为 'Read-only'\n" +
       "3. 创建配置文件 ~/.config/opencode/copilot-quota-token.json:\n" +
-      '   {"token": "github_pat_xxx...", "username": "你的用户名"}\n\n' +
+      '   {"token": "github_pat_xxx...", "username": "你的用户名", "tier": "pro"}\n' +
+      "有效 tier 值: free, pro, pro+, business, enterprise (需与你的订阅计划匹配)\n\n" +
       "其他方法:\n" +
       "• 在 VS Code 中点击状态栏的 Copilot 图标查看配额\n" +
       "• 访问 https://github.com/settings/billing 查看使用情况",
@@ -195,7 +196,8 @@ const translations = {
       "1. Create a fine-grained PAT (visit https://github.com/settings/tokens?type=beta)\n" +
       "2. Under 'Account permissions', set 'Plan' to 'Read-only'\n" +
       "3. Create config file ~/.config/opencode/copilot-quota-token.json:\n" +
-      '   {"token": "github_pat_xxx...", "username": "YourUsername"}\n\n' +
+      '   {"token": "github_pat_xxx...", "username": "YourUsername", "tier": "pro"}\n' +
+      "Valid tier values: free, pro, pro+, business, enterprise (must match your subscription plan)\n\n" +
       "Alternatives:\n" +
       "• Click the Copilot icon in VS Code status bar to view quota\n" +
       "• Visit https://github.com/settings/billing for usage info",

@@ -23,3 +23,12 @@ Thumbs.db
 # Debug
 *.log
 npm-debug.log*
+
+# Other Stuff
+skills-lock.json
+.agent/skills/typescript-best-practices/SKILL.md
+.agents/skills/typescript-best-practices/SKILL.md
+.claude/skills/typescript-best-practices/
+.kilocode/
+.kiro/
+.sisyphus/

@@ -13,11 +13,57 @@ import { homedir } from "os";
 import { join } from "path";
 
 import { t } from "./lib/i18n";
-import { type AuthData, type QueryResult } from "./lib/types";
+import { type AuthData, type QueryResult, REQUEST_TIMEOUT_MS } from "./lib/types";
 import { queryOpenAIUsage } from "./lib/openai";
 import { queryZaiUsage, queryZhipuUsage } from "./lib/zhipu";
 import { queryGoogleUsage } from "./lib/google";
 import { queryCopilotUsage } from "./lib/copilot";
+
+// ============================================================================
+// 平台查询配置
+// ============================================================================
+
+/**
+ * 平台查询配置
+ */
+interface PlatformQuery {
+  name: string;
+  title: string;
+  queryFn: () => Promise<QueryResult | null>;
+  timeoutMs: number;
+}
+
+/**
+ * 带超时的平台查询包装器
+ * 确保每个平台查询有独立超时，失败不影响其他平台
+ */
+async function queryWithTimeout(
+  queryFn: () => Promise<QueryResult | null>,
+  timeoutMs: number,
+  platformName: string,
+): Promise<QueryResult | null> {
+  try {
+    const result = await Promise.race([
+      queryFn(),
+      new Promise<QueryResult>((resolve) =>
+        setTimeout(
+          () =>
+            resolve({
+              success: false,
+              error: `[${platformName}] ${t.timeoutError(timeoutMs / 1000)}`,
+            }),
+          timeoutMs,
+        ),
+      ),
+    ]);
+    return result;
+  } catch (err) {
+    return {
+      success: false,
+      error: `[${platformName}] ${err instanceof Error ? err.message : String(err)}`,
+    };
+  }
+}
 
 // ============================================================================
 // 插件导出（唯一导出，避免其他函数被当作插件加载）
@@ -45,41 +91,81 @@ export const MyStatusPlugin: Plugin = async () => {
             );
           }
 
-          // 2. 并行查询所有平台（Google 不依赖 authData）
-          const [openaiResult, zhipuResult, zaiResult, googleResult, copilotResult] =
-            await Promise.all([
-              queryOpenAIUsage(authData.openai),
-              queryZhipuUsage(authData["zhipuai-coding-plan"]),
-              queryZaiUsage(authData["zai-coding-plan"]),
-              queryGoogleUsage(),
-              queryCopilotUsage(authData["github-copilot"]),
-            ]);
+          // 2. 系统化并行查询所有平台（每个平台有独立超时）
+          const platforms: PlatformQuery[] = [
+            {
+              name: "OpenAI",
+              title: t.openaiTitle,
+              queryFn: () => queryOpenAIUsage(authData.openai),
+              timeoutMs: REQUEST_TIMEOUT_MS,
+            },
+            {
+              name: "ZhipuAI",
+              title: t.zhipuTitle,
+              queryFn: () => queryZhipuUsage(authData["zhipuai-coding-plan"]),
+              timeoutMs: REQUEST_TIMEOUT_MS,
+            },
+            {
+              name: "Z.ai",
+              title: t.zaiTitle,
+              queryFn: () => queryZaiUsage(authData["zai-coding-plan"]),
+              timeoutMs: REQUEST_TIMEOUT_MS,
+            },
+            {
+              name: "Google",
+              title: t.googleTitle,
+              queryFn: () => queryGoogleUsage(),
+              timeoutMs: REQUEST_TIMEOUT_MS,
+            },
+            {
+              name: "Copilot",
+              title: t.copilotTitle,
+              queryFn: () => queryCopilotUsage(authData["github-copilot"]),
+              timeoutMs: REQUEST_TIMEOUT_MS,
+            },
+          ];
 
-          // 3. 收集结果
-          const results: string[] = [];
+          // 使用 Promise.allSettled 确保即使一个平台失败也会继续查询其他平台
+          const settledResults = await Promise.allSettled(
+            platforms.map((p) => queryWithTimeout(p.queryFn, p.timeoutMs, p.name)),
+          );
+
+          // 将 settled results 转换为统一的结果数组
+          const queryResults: Array<{ platform: PlatformQuery; result: QueryResult | null }> = [];
+
+          for (let i = 0; i < platforms.length; i++) {
+            const platform = platforms[i];
+            const settled = settledResults[i];
+
+            let result: QueryResult | null = null;
+
+            if (settled.status === "fulfilled") {
+              result = settled.value;
+            } else {
+              // Promise 被拒绝（理论上不应该发生，因为 queryWithTimeout 已捕获错误）
+              result = {
+                success: false,
+                error: `[${platform.name}] ${settled.reason}`,
+              };
+            }
+
+            queryResults.push({ platform, result });
+          }
+
+          // 3. 系统化收集结果 - 每个平台独立处理，确保一个失败不影响其他
+          const outputResults: string[] = [];
           const errors: string[] = [];
 
-          // 处理 OpenAI 结果
-          collectResult(openaiResult, t.openaiTitle, results, errors);
-
-          // 处理智谱结果
-          collectResult(zhipuResult, t.zhipuTitle, results, errors);
-
-          // 处理 Z.ai 结果
-          collectResult(zaiResult, t.zaiTitle, results, errors);
-
-          // 处理 Google 结果
-          collectResult(googleResult, t.googleTitle, results, errors);
-
-          // 处理 GitHub Copilot 结果
-          collectResult(copilotResult, t.copilotTitle, results, errors);
+          for (const { platform, result } of queryResults) {
+            collectResult(result, platform.title, outputResults, errors);
+          }
 
           // 4. 汇总输出
-          if (results.length === 0 && errors.length === 0) {
+          if (outputResults.length === 0 && errors.length === 0) {
             return t.noAccounts;
           }
 
-          let output = results.join("\n");
+          let output = outputResults.join("\n");
 
           if (errors.length > 0) {
             if (output) output += "\n\n";
