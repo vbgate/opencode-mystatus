@@ -11,7 +11,7 @@
 // 类型定义
 // ============================================================================
 
-export type Language = "zh" | "en";
+export type Language = "zh" | "zh-tw" | "en";
 
 // ============================================================================
 // 语言检测
@@ -25,6 +25,7 @@ function detectLanguage(): Language {
   // 1. 优先使用 Intl API（更可靠）
   try {
     const intlLocale = Intl.DateTimeFormat().resolvedOptions().locale;
+    if (intlLocale.startsWith("zh-TW") || intlLocale.startsWith("zh-Hant")) return "zh-tw";
     if (intlLocale.startsWith("zh")) return "zh";
   } catch {
     // Intl API 不可用，继续尝试环境变量
@@ -33,6 +34,7 @@ function detectLanguage(): Language {
   // 2. 回退到环境变量
   const lang =
     process.env.LANG || process.env.LC_ALL || process.env.LANGUAGE || "";
+  if (lang.startsWith("zh_TW") || lang.startsWith("zh_HK")) return "zh-tw";
   if (lang.startsWith("zh")) return "zh";
 
   // 3. 默认英文
@@ -121,6 +123,84 @@ const translations = {
       "其他方法:\n" +
       "• 在 VS Code 中点击状态栏的 Copilot 图标查看配额\n" +
       "• 访问 https://github.com/settings/billing 查看使用情况",
+  },
+  "zh-tw": {
+    // 時間單位
+    days: (n: number) => `${n}天`,
+    hours: (n: number) => `${n}小時`,
+    minutes: (n: number) => `${n}分鐘`,
+
+    // 限額相關
+    hourLimit: (h: number) => `${h}小時限額`,
+    dayLimit: (d: number) => `${d}天限額`,
+    remaining: (p: number) => `剩餘 ${p}%`,
+    resetIn: (t: string) => `重置: ${t}後`,
+    limitReached: "⚠️ 已達到限額上限!",
+
+    // 通用
+    account: "Account:",
+    unknown: "未知",
+    used: "已用",
+
+    // 錯誤訊息
+    authError: (path: string, err: string) =>
+      `❌ 無法讀取認證檔案: ${path}\n錯誤: ${err}`,
+    apiError: (status: number, text: string) =>
+      `OpenAI API 請求失敗 (${status}): ${text}`,
+    timeoutError: (seconds: number) => `請求逾時 (${seconds}秒)`,
+    tokenExpired:
+      "⚠️ OAuth 授權已過期，請在 OpenCode 中使用一次 OpenAI 模型以重新整理授權。",
+    noAccounts:
+      "未找到任何已設定的帳號。\n\n支援的帳號類型:\n- OpenAI (Plus/Team/Pro 訂閱用戶)\n- 智譜 AI (Coding Plan)\n- Z.ai (Coding Plan)\n- Google Cloud (Antigravity)",
+    queryFailed: "❌ 查詢失敗的帳號:\n",
+
+    // 平台標題
+    openaiTitle: "## OpenAI 帳號額度",
+    zhipuTitle: "## 智譜 AI 帳號額度",
+    zaiTitle: "## Z.ai 帳號額度",
+
+    // 智譜 AI 相關
+    zhipuApiError: (status: number, text: string) =>
+      `智譜 API 請求失敗 (${status}): ${text}`,
+    zaiApiError: (status: number, text: string) =>
+      `Z.ai API 請求失敗 (${status}): ${text}`,
+    zhipuTokensLimit: "5 小時 Token 限額",
+    zhipuMcpLimit: "MCP 月度配額",
+    zhipuAccountName: "Coding Plan",
+    zaiAccountName: "Z.ai",
+    noQuotaData: "暫無配額資料",
+
+    // Google 相關
+    googleTitle: "## Google Cloud 帳號額度",
+    googleApiError: (status: number, text: string) =>
+      `Google API 請求失敗 (${status}): ${text}`,
+    googleNoProjectId: "⚠️ 缺少 project_id，無法查詢額度。",
+
+    // GitHub Copilot 相關
+    copilotTitle: "## GitHub Copilot 帳號額度",
+    copilotApiError: (status: number, text: string) =>
+      `GitHub Copilot API 請求失敗 (${status}): ${text}`,
+    premiumRequests: "Premium",
+    chatQuota: "Chat",
+    completionsQuota: "Completions",
+    overage: "超額使用",
+    overageRequests: "次請求",
+    quotaResets: "配額重置",
+    resetsSoon: "即將重置",
+    modelBreakdown: "模型使用明細:",
+    billingPeriod: "計費週期",
+    copilotQuotaUnavailable:
+      "⚠️ GitHub Copilot 配額查詢暫時不可用。\n" +
+      "OpenCode 的新 OAuth 整合不支援存取配額 API。",
+    copilotQuotaWorkaround:
+      "解決方案:\n" +
+      "1. 建立一個 fine-grained PAT (前往 https://github.com/settings/tokens?type=beta)\n" +
+      "2. 在 'Account permissions' 中將 'Plan' 設為 'Read-only'\n" +
+      "3. 建立設定檔 ~/.config/opencode/copilot-quota-token.json:\n" +
+      '   {"token": "github_pat_xxx...", "username": "你的使用者名稱"}\n\n' +
+      "其他方法:\n" +
+      "• 在 VS Code 中點擊狀態列的 Copilot 圖示查看配額\n" +
+      "• 前往 https://github.com/settings/billing 查看使用情況",
   },
   en: {
     // 时间单位
