@@ -362,6 +362,10 @@ export async function queryGoogleUsage(): Promise<QueryResult> {
       output: outputs.join("\n\n"),
     };
   } catch (err) {
+    // 文件不存在表示用户未配置 Google 账号，静默跳过
+    if (err instanceof Error && (err as NodeJS.ErrnoException).code === "ENOENT") {
+      return { success: true, output: "" };
+    }
     return {
       success: false,
       error: err instanceof Error ? err.message : String(err),
