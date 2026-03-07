@@ -54,6 +54,8 @@ interface AccountQuotaInfo {
 interface ModelConfig {
   key: string;
   altKey?: string;
+  altKeys?: string[];
+  prefix?: string;
   display: string;
 }
 
@@ -68,11 +70,12 @@ const USER_AGENT = "antigravity/1.11.9 windows/amd64";
 // 需要显示的 4 个模型配置
 const MODELS_TO_DISPLAY: ModelConfig[] = [
   { key: "gemini-3-pro-high", altKey: "gemini-3-pro-low", display: "G3 Pro" },
-  { key: "gemini-3-pro-image", display: "G3 Image" },
+  { key: "gemini-3-pro-image", altKeys: ["gemini-3-pro-image-generation"], prefix: "gemini-3-pro-image", display: "G3 Image" },
   { key: "gemini-3-flash", display: "G3 Flash" },
   {
     key: "claude-opus-4-5-thinking",
-    altKey: "claude-opus-4-5",
+    altKeys: ["claude-opus-4-5", "claude-sonnet-4-6-thinking", "claude-sonnet-4-6"],
+    prefix: "claude-",
     display: "Claude",
   },
 ];
@@ -131,13 +134,32 @@ function formatResetTimeShort(isoTime: string): string {
  */
 function extractModelQuotas(data: GoogleQuotaResponse): ModelQuota[] {
   const quotas: ModelQuota[] = [];
+  const modelKeys = Object.keys(data.models);
 
   for (const modelConfig of MODELS_TO_DISPLAY) {
     let modelInfo = data.models[modelConfig.key];
 
-    // 如果主 key 没有数据，尝试 altKey
+    // Single altKey fallback (existing behavior)
     if (!modelInfo && modelConfig.altKey) {
       modelInfo = data.models[modelConfig.altKey];
+    }
+
+    // Multiple altKeys fallback
+    if (!modelInfo && modelConfig.altKeys) {
+      for (const altKey of modelConfig.altKeys) {
+        modelInfo = data.models[altKey];
+        if (modelInfo) break;
+      }
+    }
+
+    // Prefix match as last resort
+    if (!modelInfo && modelConfig.prefix) {
+      const matchingKey = modelKeys.find((k) =>
+        k.startsWith(modelConfig.prefix!),
+      );
+      if (matchingKey) {
+        modelInfo = data.models[matchingKey];
+      }
     }
 
     // 只要模型存在就显示（即使没有 quotaInfo 或额度为 0）

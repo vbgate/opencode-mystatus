@@ -4,7 +4,7 @@
  * [输入]: ~/.local/share/opencode/auth.json 和 ~/.config/opencode/antigravity-accounts.json 中的认证信息
  * [输出]: 带进度条的额度使用情况展示
  * [定位]: 通过 mystatus 工具查询各账号额度
- * [同步]: lib/openai.ts, lib/zhipu.ts, lib/google.ts, lib/types.ts, lib/i18n.ts
+ * [同步]: lib/openai.ts, lib/zhipu.ts, lib/google.ts, lib/claude.ts, lib/types.ts, lib/i18n.ts
  */
 
 import { type Plugin, tool } from "@opencode-ai/plugin";
@@ -18,6 +18,7 @@ import { queryOpenAIUsage } from "./lib/openai";
 import { queryZaiUsage, queryZhipuUsage } from "./lib/zhipu";
 import { queryGoogleUsage } from "./lib/google";
 import { queryCopilotUsage } from "./lib/copilot";
+import { queryClaudeUsage } from "./lib/claude";
 
 // ============================================================================
 // 插件导出（唯一导出，避免其他函数被当作插件加载）
@@ -28,7 +29,7 @@ export const MyStatusPlugin: Plugin = async () => {
     tool: {
       mystatus: tool({
         description:
-          "Query account quota usage for all configured AI platforms. Returns remaining quota percentages, usage stats, and reset countdowns with visual progress bars. Currently supports OpenAI (ChatGPT/Codex), Zhipu AI, Z.ai, Google Antigravity, and GitHub Copilot.",
+          "Query account quota usage for all configured AI platforms. Returns remaining quota percentages, usage stats, and reset countdowns with visual progress bars. Currently supports OpenAI (ChatGPT/Codex), Zhipu AI, Z.ai, Google Antigravity, GitHub Copilot, and Claude (Anthropic).",
         args: {},
         async execute() {
           // 1. 读取 auth.json
@@ -45,14 +46,15 @@ export const MyStatusPlugin: Plugin = async () => {
             );
           }
 
-          // 2. 并行查询所有平台（Google 不依赖 authData）
-          const [openaiResult, zhipuResult, zaiResult, googleResult, copilotResult] =
+          // 2. 并行查询所有平台（Google 不依赖 authData，Claude 优先用 OAuth）
+          const [openaiResult, zhipuResult, zaiResult, googleResult, copilotResult, claudeResult] =
             await Promise.all([
               queryOpenAIUsage(authData.openai),
               queryZhipuUsage(authData["zhipuai-coding-plan"]),
               queryZaiUsage(authData["zai-coding-plan"]),
               queryGoogleUsage(),
               queryCopilotUsage(authData["github-copilot"]),
+              queryClaudeUsage(authData.anthropic),
             ]);
 
           // 3. 收集结果
@@ -73,6 +75,9 @@ export const MyStatusPlugin: Plugin = async () => {
 
           // 处理 GitHub Copilot 结果
           collectResult(copilotResult, t.copilotTitle, results, errors);
+
+          // 处理 Claude 结果
+          collectResult(claudeResult, t.claudeTitle, results, errors);
 
           // 4. 汇总输出
           if (results.length === 0 && errors.length === 0) {
