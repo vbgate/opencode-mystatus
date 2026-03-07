@@ -19,6 +19,7 @@ An [OpenCode](https://opencode.ai) plugin to query account quota usage for multi
 | Z.ai         | Coding Plan       | `~/.local/share/opencode/auth.json`            |
 | GitHub Copilot | Individual / Business | `~/.local/share/opencode/auth.json`            |
 | Google Cloud | Antigravity       | `~/.config/opencode/antigravity-accounts.json` |
+| Claude       | Subscription (Pro/Max) or Organization | `~/.local/share/opencode/auth.json` (OAuth) or `ANTHROPIC_ADMIN_KEY` |
 
 ## Installation
 
@@ -146,27 +147,65 @@ G3 Pro     4h 59m     ███████████████████�
 G3 Image   4h 59m     ████████████████████ 100%
 G3 Flash   4h 59m     ████████████████████ 100%
 Claude     2d 9h      ░░░░░░░░░░░░░░░░░░░░ 0%
-```
+
+## Claude (Anthropic) Account Usage
+
+Account:        Claude (Subscription)
+
+5-hour session limit
+███████████████████████░░░░░░░ 73% remaining 🟢
+Resets in: 3h 45m
+
+7-day weekly limit
+████████████████░░░░░░░░░░░░░░ 55% remaining 🟢
+Resets in: 4d 12h
 
 ## Features
-
 - Query quota usage across multiple AI platforms in one command
 - Visual progress bars showing remaining quota
 - Reset time countdown
 - Multi-language support (Chinese / English)
 - Multiple Google Cloud accounts support
 - API key masking for security
+- Claude/Anthropic subscription usage tracking (5h session + 7d weekly limits)
 
 ## Configuration
 
-No additional configuration required. The plugin automatically reads credentials from:
+No additional configuration required for most platforms. The plugin automatically reads credentials from:
 
 - **OpenAI, Zhipu AI, Z.ai & GitHub Copilot**: `~/.local/share/opencode/auth.json`
 - **Google Cloud**: `~/.config/opencode/antigravity-accounts.json`
+- **Claude (Anthropic)**: `~/.local/share/opencode/auth.json` (OAuth, auto-detected) or `ANTHROPIC_ADMIN_KEY` environment variable
 
 ### Google Cloud Setup
 
 To query Google Cloud (Antigravity) account quota, you need to install the [opencode-antigravity-auth](https://github.com/NoeFabris/opencode-antigravity-auth) plugin first to authenticate your Google account.
+
+### Claude (Anthropic) Setup
+
+**For Subscription Users (Pro/Max):** No setup needed! The plugin automatically reads your OAuth tokens from `~/.local/share/opencode/auth.json` (stored by the `opencode-anthropic-auth` plugin). It makes a minimal API call (~$0.001) to read rate limit headers.
+
+**For Organization Users (Admin API):**
+
+If you have an organization account, you can use an **Admin API key** from the [Anthropic Console](https://console.anthropic.com/settings/admin-keys).
+
+> **Note:** The Admin API is only available for organization accounts.
+
+**Option 1: Environment Variable (recommended)**
+
+```bash
+export ANTHROPIC_ADMIN_KEY="sk-ant-admin-..."
+```
+
+**Option 2: Config File**
+
+Create `~/.config/opencode/claude-admin-key.json`:
+
+```json
+{
+  "adminKey": "sk-ant-admin-..."
+}
+```
 
 ## Security
 
@@ -185,6 +224,8 @@ This plugin is safe to use:
 - `https://api.github.com/copilot_internal/user` - GitHub Copilot official API
 - `https://oauth2.googleapis.com/token` - Google official OAuth API
 - `https://cloudcode-pa.googleapis.com/v1internal:fetchAvailableModels` - Google Cloud official API
+- `https://api.anthropic.com/v1/messages` - Anthropic Messages API (minimal probe for rate limit headers)
+- `https://console.anthropic.com/v1/oauth/token` - Anthropic OAuth token refresh
 
 **Privacy:**
 

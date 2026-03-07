@@ -4,7 +4,7 @@
  * [输入]: 系统语言环境
  * [输出]: 翻译函数和当前语言
  * [定位]: 被所有平台模块共享使用
- * [同步]: openai.ts, zhipu.ts, mystatus.ts, utils.ts
+ * [同步]: openai.ts, zhipu.ts, claude.ts, mystatus.ts, utils.ts
  */
 
 // ============================================================================
@@ -121,6 +121,13 @@ const translations = {
       "其他方法:\n" +
       "• 在 VS Code 中点击状态栏的 Copilot 图标查看配额\n" +
       "• 访问 https://github.com/settings/billing 查看使用情况",
+
+    // Claude (Anthropic) 相关
+    claudeTitle: "## Claude (Anthropic) 账号用量",
+    claudeSessionLimit: "5 小时会话限额",
+    claudeWeeklyLimit: "7 天周限额",
+    claudeApiError: (status: number, text: string) =>
+      `Anthropic API 请求失败 (${status}): ${text}`,
   },
   en: {
     // 时间单位
@@ -199,6 +206,13 @@ const translations = {
       "Alternatives:\n" +
       "• Click the Copilot icon in VS Code status bar to view quota\n" +
       "• Visit https://github.com/settings/billing for usage info",
+
+    // Claude (Anthropic) related
+    claudeTitle: "## Claude (Anthropic) Account Usage",
+    claudeSessionLimit: "5-hour session limit",
+    claudeWeeklyLimit: "7-day weekly limit",
+    claudeApiError: (status: number, text: string) =>
+      `Anthropic API request failed (${status}): ${text}`,
   },
 } as const;
 

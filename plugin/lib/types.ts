@@ -2,7 +2,7 @@
  * 共享类型定义
  *
  * [定位]: 被所有平台模块共享使用的类型
- * [同步]: openai.ts, zhipu.ts, google.ts, mystatus.ts
+ * [同步]: openai.ts, zhipu.ts, google.ts, claude.ts, mystatus.ts
  */
 
 // ============================================================================
@@ -94,6 +94,32 @@ export interface AntigravityAccountsFile {
 }
 
 /**
+ * Claude (Anthropic) Admin API configuration
+ * Stored in ~/.config/opencode/claude-admin-key.json
+ * or via environment variable ANTHROPIC_ADMIN_KEY
+ *
+ * Requires an Admin API key (sk-ant-admin...) from:
+ * https://console.anthropic.com/settings/admin-keys
+ */
+export interface ClaudeAdminConfig {
+  /** Anthropic Admin API key */
+  adminKey: string;
+}
+
+/**
+ * Anthropic OAuth 认证数据
+ * From ~/.local/share/opencode/auth.json (anthropic key)
+ * Supports both OAuth (subscription) and API key auth
+ */
+export interface AnthropicAuthData {
+  type: string;
+  access?: string;
+  refresh?: string;
+  expires?: number;
+  key?: string;
+}
+
+/**
  * 完整认证数据结构
  */
 export interface AuthData {
@@ -101,6 +127,7 @@ export interface AuthData {
   "zhipuai-coding-plan"?: ZhipuAuthData;
   "zai-coding-plan"?: ZhipuAuthData;
   "github-copilot"?: CopilotAuthData;
+  anthropic?: AnthropicAuthData;
 }
 
 // ============================================================================
