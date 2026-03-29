@@ -53,9 +53,12 @@ const translations = {
     // 限额相关
     hourLimit: (h: number) => `${h}小时限额`,
     dayLimit: (d: number) => `${d}天限额`,
+    fiveHourLimit: "5小时限额",
+    sevenDayLimit: "7天限额",
     remaining: (p: number) => `剩余 ${p}%`,
     resetIn: (t: string) => `重置: ${t}后`,
     limitReached: "⚠️ 已达到限额上限!",
+    extraUsage: "额外用量",
 
     // 通用
     account: "Account:",
@@ -67,17 +70,23 @@ const translations = {
       `❌ 无法读取认证文件: ${path}\n错误: ${err}`,
     apiError: (status: number, text: string) =>
       `OpenAI API 请求失败 (${status}): ${text}`,
+    anthropicApiError: (status: number, text: string) =>
+      `Anthropic API 请求失败 (${status}): ${text}`,
     timeoutError: (seconds: number) => `请求超时 (${seconds}秒)`,
     tokenExpired:
       "⚠️ OAuth 授权已过期，请在 OpenCode 中使用一次 OpenAI 模型以刷新授权。",
+    anthropicTokenExpired:
+      "⚠️ Claude OAuth 授权已过期，请在 OpenCode 中使用一次 Anthropic 模型以刷新授权。",
     noAccounts:
-      "未找到任何已配置的账号。\n\n支持的账号类型:\n- OpenAI (Plus/Team/Pro 订阅用户)\n- 智谱 AI (Coding Plan)\n- Z.ai (Coding Plan)\n- Google Cloud (Antigravity)",
+      "未找到任何已配置的账号。\n\n支持的账号类型:\n- Anthropic (Claude Code / Pro / Max)\n- OpenAI (Plus/Team/Pro 订阅用户)\n- 智谱 AI (Coding Plan)\n- Z.ai (Coding Plan)\n- GitHub Copilot\n- Google Cloud (Antigravity)",
     queryFailed: "❌ 查询失败的账号:\n",
 
     // 平台标题
+    anthropicTitle: "## Anthropic 账号额度",
     openaiTitle: "## OpenAI 账号额度",
     zhipuTitle: "## 智谱 AI 账号额度",
     zaiTitle: "## Z.ai 账号额度",
+    anthropicAccountName: "Claude",
 
     // 智谱 AI 相关
     zhipuApiError: (status: number, text: string) =>
@@ -131,9 +140,12 @@ const translations = {
     // 限额相关
     hourLimit: (h: number) => `${h}-hour limit`,
     dayLimit: (d: number) => `${d}-day limit`,
+    fiveHourLimit: "5-hour limit",
+    sevenDayLimit: "7-day limit",
     remaining: (p: number) => `${p}% remaining`,
     resetIn: (t: string) => `Resets in: ${t}`,
     limitReached: "⚠️ Rate limit reached!",
+    extraUsage: "Extra usage",
 
     // 通用
     account: "Account:",
@@ -145,17 +157,23 @@ const translations = {
       `❌ Failed to read auth file: ${path}\nError: ${err}`,
     apiError: (status: number, text: string) =>
       `OpenAI API request failed (${status}): ${text}`,
+    anthropicApiError: (status: number, text: string) =>
+      `Anthropic API request failed (${status}): ${text}`,
     timeoutError: (seconds: number) => `Request timeout (${seconds}s)`,
     tokenExpired:
       "⚠️ OAuth token expired. Please use an OpenAI model in OpenCode to refresh authorization.",
+    anthropicTokenExpired:
+      "⚠️ Claude OAuth token expired. Please use an Anthropic model in OpenCode to refresh authorization.",
     noAccounts:
-      "No configured accounts found.\n\nSupported account types:\n- OpenAI (Plus/Team/Pro subscribers)\n- Zhipu AI (Coding Plan)\n- Z.ai (Coding Plan)\n- Google Cloud (Antigravity)",
+      "No configured accounts found.\n\nSupported account types:\n- Anthropic (Claude Code / Pro / Max)\n- OpenAI (Plus/Team/Pro subscribers)\n- Zhipu AI (Coding Plan)\n- Z.ai (Coding Plan)\n- GitHub Copilot\n- Google Cloud (Antigravity)",
     queryFailed: "❌ Failed to query accounts:\n",
 
     // 平台标题
+    anthropicTitle: "## Anthropic Account Quota",
     openaiTitle: "## OpenAI Account Quota",
     zhipuTitle: "## Zhipu AI Account Quota",
     zaiTitle: "## Z.ai Account Quota",
+    anthropicAccountName: "Claude",
 
     // 智谱 AI 相关
     zhipuApiError: (status: number, text: string) =>

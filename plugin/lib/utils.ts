@@ -28,6 +28,18 @@ export function formatDuration(seconds: number): string {
   return parts.join(currentLang === "en" ? " " : "");
 }
 
+/**
+ * 将 ISO 时间转换为距离现在的剩余秒数
+ */
+export function getResetAfterSeconds(isoTime: string | undefined): number | null {
+  if (!isoTime) return null;
+
+  const resetDate = new Date(isoTime);
+  if (Number.isNaN(resetDate.getTime())) return null;
+
+  return Math.max(0, Math.floor((resetDate.getTime() - Date.now()) / 1000));
+}
+
 // ============================================================================
 // 进度条
 // ============================================================================

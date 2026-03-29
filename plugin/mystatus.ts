@@ -14,6 +14,7 @@ import { join } from "path";
 
 import { t } from "./lib/i18n";
 import { type AuthData, type QueryResult } from "./lib/types";
+import { queryAnthropicUsage } from "./lib/anthropic";
 import { queryOpenAIUsage } from "./lib/openai";
 import { queryZaiUsage, queryZhipuUsage } from "./lib/zhipu";
 import { queryGoogleUsage } from "./lib/google";
@@ -28,7 +29,7 @@ export const MyStatusPlugin: Plugin = async () => {
     tool: {
       mystatus: tool({
         description:
-          "Query account quota usage for all configured AI platforms. Returns remaining quota percentages, usage stats, and reset countdowns with visual progress bars. Currently supports OpenAI (ChatGPT/Codex), Zhipu AI, Z.ai, Google Antigravity, and GitHub Copilot.",
+          "Query account quota usage for all configured AI platforms. Returns remaining quota percentages, usage stats, and reset countdowns with visual progress bars. Currently supports Anthropic (Claude), OpenAI (ChatGPT/Codex), Zhipu AI, Z.ai, Google Antigravity, and GitHub Copilot.",
         args: {},
         async execute() {
           // 1. 读取 auth.json
@@ -46,8 +47,9 @@ export const MyStatusPlugin: Plugin = async () => {
           }
 
           // 2. 并行查询所有平台（Google 不依赖 authData）
-          const [openaiResult, zhipuResult, zaiResult, googleResult, copilotResult] =
+          const [anthropicResult, openaiResult, zhipuResult, zaiResult, googleResult, copilotResult] =
             await Promise.all([
+              queryAnthropicUsage(authData.anthropic),
               queryOpenAIUsage(authData.openai),
               queryZhipuUsage(authData["zhipuai-coding-plan"]),
               queryZaiUsage(authData["zai-coding-plan"]),
@@ -58,6 +60,8 @@ export const MyStatusPlugin: Plugin = async () => {
           // 3. 收集结果
           const results: string[] = [];
           const errors: string[] = [];
+
+          collectResult(anthropicResult, t.anthropicTitle, results, errors);
 
           // 处理 OpenAI 结果
           collectResult(openaiResult, t.openaiTitle, results, errors);
