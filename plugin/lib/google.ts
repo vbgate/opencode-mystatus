@@ -7,6 +7,7 @@
  * [同步]: mystatus.ts, types.ts, utils.ts, i18n.ts
  */
 
+import { existsSync } from "fs";
 import { readFile } from "fs/promises";
 import { homedir } from "os";
 import { join } from "path";
@@ -301,10 +302,16 @@ function formatAccountQuota(quotaInfo: AccountQuotaInfo): string {
  * 查询所有 Antigravity 账号的额度
  * @returns 查询结果
  */
-export async function queryGoogleUsage(): Promise<QueryResult> {
+export async function queryGoogleUsage(): Promise<QueryResult | null> {
+  const accountsPath = getAntigravityAccountsPath();
+
+  if (!existsSync(accountsPath)) {
+    return null;
+  }
+
   try {
     // 读取账号文件
-    const content = await readFile(getAntigravityAccountsPath(), "utf-8");
+    const content = await readFile(accountsPath, "utf-8");
     const file = JSON.parse(content) as AntigravityAccountsFile;
 
     if (!file.accounts || file.accounts.length === 0) {
