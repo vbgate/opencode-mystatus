@@ -33,6 +33,16 @@ export interface OpenAIAuthData {
 }
 
 /**
+ * Anthropic OAuth 认证数据
+ */
+export interface AnthropicAuthData {
+  type: string;
+  access?: string;
+  refresh?: string;
+  expires?: number;
+}
+
+/**
  * 智谱 AI API 认证数据
  */
 export interface ZhipuAuthData {
@@ -97,6 +107,7 @@ export interface AntigravityAccountsFile {
  * 完整认证数据结构
  */
 export interface AuthData {
+  anthropic?: AnthropicAuthData;
   openai?: OpenAIAuthData;
   "zhipuai-coding-plan"?: ZhipuAuthData;
   "zai-coding-plan"?: ZhipuAuthData;
