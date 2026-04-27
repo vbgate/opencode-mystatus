@@ -17,6 +17,7 @@ An [OpenCode](https://opencode.ai) plugin to query account quota usage for multi
 | OpenAI       | Plus / Team / Pro | `~/.local/share/opencode/auth.json`            |
 | Zhipu AI     | Coding Plan       | `~/.local/share/opencode/auth.json`            |
 | Z.ai         | Coding Plan       | `~/.local/share/opencode/auth.json`            |
+| Synthetic.new | API Key           | `~/.local/share/opencode/auth.json`            |
 | GitHub Copilot | Individual / Business | `~/.local/share/opencode/auth.json`            |
 | Google Cloud | Antigravity       | `~/.config/opencode/antigravity-accounts.json` |
 
@@ -130,6 +131,25 @@ Account:        9c89****AQVM (Z.ai)
 Used: 0.5M / 10.0M
 Resets in: 4h
 
+## Synthetic Account Quota
+
+Account:        Synthetic (API)
+
+5-hour limit
+██████████████████████████████ 99% remaining
+Used: 28 / 750
+Quota resets: 48m (2026-04-27T03:34:13.000Z)
+
+Weekly limit
+██████████████████████████████ 99% remaining
+Used: $35.85 / $36.00
+Quota resets: 1h 32m (2026-04-27T04:18:36.000Z)
+
+Search limit
+██████████████████████████████ 100% remaining
+Used: 0 / 250
+Quota resets: 1h 39m (2026-04-27T04:25:14.238Z)
+
 ## GitHub Copilot Account Quota
 
 Account:        GitHub Copilot (individual)
@@ -161,7 +181,7 @@ Claude     2d 9h      ░░░░░░░░░░░░░░░░░░░�
 
 No additional configuration required. The plugin automatically reads credentials from:
 
-- **OpenAI, Zhipu AI, Z.ai & GitHub Copilot**: `~/.local/share/opencode/auth.json`
+- **OpenAI, Zhipu AI, Z.ai, Synthetic.new & GitHub Copilot**: `~/.local/share/opencode/auth.json`
 - **Google Cloud**: `~/.config/opencode/antigravity-accounts.json`
 
 ### Google Cloud Setup
@@ -182,6 +202,7 @@ This plugin is safe to use:
 - `https://chatgpt.com/backend-api/wham/usage` - OpenAI official quota API
 - `https://bigmodel.cn/api/monitor/usage/quota/limit` - Zhipu AI official quota API
 - `https://api.z.ai/api/monitor/usage/quota/limit` - Z.ai official quota API
+- `https://api.synthetic.new/v2/quotas` - Synthetic.new official quota API
 - `https://api.github.com/copilot_internal/user` - GitHub Copilot official API
 - `https://oauth2.googleapis.com/token` - Google official OAuth API
 - `https://cloudcode-pa.googleapis.com/v1internal:fetchAvailableModels` - Google Cloud official API

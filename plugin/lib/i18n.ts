@@ -71,21 +71,27 @@ const translations = {
     tokenExpired:
       "⚠️ OAuth 授权已过期，请在 OpenCode 中使用一次 OpenAI 模型以刷新授权。",
     noAccounts:
-      "未找到任何已配置的账号。\n\n支持的账号类型:\n- OpenAI (Plus/Team/Pro 订阅用户)\n- 智谱 AI (Coding Plan)\n- Z.ai (Coding Plan)\n- Google Cloud (Antigravity)",
+      "未找到任何已配置的账号。\n\n支持的账号类型:\n- OpenAI (Plus/Team/Pro 订阅用户)\n- 智谱 AI (Coding Plan)\n- Z.ai (Coding Plan)\n- Synthetic.new (API Key)\n- Google Cloud (Antigravity)",
     queryFailed: "❌ 查询失败的账号:\n",
 
     // 平台标题
     openaiTitle: "## OpenAI 账号额度",
     zhipuTitle: "## 智谱 AI 账号额度",
     zaiTitle: "## Z.ai 账号额度",
+    syntheticTitle: "## Synthetic 账号额度",
 
     // 智谱 AI 相关
     zhipuApiError: (status: number, text: string) =>
       `智谱 API 请求失败 (${status}): ${text}`,
     zaiApiError: (status: number, text: string) =>
       `Z.ai API 请求失败 (${status}): ${text}`,
+    syntheticApiError: (status: number, text: string) =>
+      `Synthetic API 请求失败 (${status}): ${text}`,
     zhipuTokensLimit: "5 小时 Token 限额",
     zhipuMcpLimit: "MCP 月度配额",
+    syntheticFiveHourLimit: "5 小时限额",
+    syntheticWeeklyLimit: "周额度",
+    syntheticSearchLimit: "搜索额度",
     zhipuAccountName: "Coding Plan",
     zaiAccountName: "Z.ai",
     noQuotaData: "暂无配额数据",
@@ -149,21 +155,27 @@ const translations = {
     tokenExpired:
       "⚠️ OAuth token expired. Please use an OpenAI model in OpenCode to refresh authorization.",
     noAccounts:
-      "No configured accounts found.\n\nSupported account types:\n- OpenAI (Plus/Team/Pro subscribers)\n- Zhipu AI (Coding Plan)\n- Z.ai (Coding Plan)\n- Google Cloud (Antigravity)",
+      "No configured accounts found.\n\nSupported account types:\n- OpenAI (Plus/Team/Pro subscribers)\n- Zhipu AI (Coding Plan)\n- Z.ai (Coding Plan)\n- Synthetic.new (API Key)\n- Google Cloud (Antigravity)",
     queryFailed: "❌ Failed to query accounts:\n",
 
     // 平台标题
     openaiTitle: "## OpenAI Account Quota",
     zhipuTitle: "## Zhipu AI Account Quota",
     zaiTitle: "## Z.ai Account Quota",
+    syntheticTitle: "## Synthetic Account Quota",
 
     // 智谱 AI 相关
     zhipuApiError: (status: number, text: string) =>
       `Zhipu API request failed (${status}): ${text}`,
     zaiApiError: (status: number, text: string) =>
       `Z.ai API request failed (${status}): ${text}`,
+    syntheticApiError: (status: number, text: string) =>
+      `Synthetic API request failed (${status}): ${text}`,
     zhipuTokensLimit: "5-hour token limit",
     zhipuMcpLimit: "MCP monthly quota",
+    syntheticFiveHourLimit: "5-hour limit",
+    syntheticWeeklyLimit: "Weekly limit",
+    syntheticSearchLimit: "Search limit",
     zhipuAccountName: "Coding Plan",
     zaiAccountName: "Z.ai",
     noQuotaData: "No quota data available",
