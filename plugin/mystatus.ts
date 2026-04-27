@@ -16,6 +16,7 @@ import { t } from "./lib/i18n";
 import { type AuthData, type QueryResult } from "./lib/types";
 import { queryOpenAIUsage } from "./lib/openai";
 import { queryZaiUsage, queryZhipuUsage } from "./lib/zhipu";
+import { querySyntheticUsage } from "./lib/synthetic";
 import { queryGoogleUsage } from "./lib/google";
 import { queryCopilotUsage } from "./lib/copilot";
 
@@ -28,7 +29,7 @@ export const MyStatusPlugin: Plugin = async () => {
     tool: {
       mystatus: tool({
         description:
-          "Query account quota usage for all configured AI platforms. Returns remaining quota percentages, usage stats, and reset countdowns with visual progress bars. Currently supports OpenAI (ChatGPT/Codex), Zhipu AI, Z.ai, Google Antigravity, and GitHub Copilot.",
+          "Query account quota usage for all configured AI platforms. Returns remaining quota percentages, usage stats, and reset countdowns with visual progress bars. Currently supports OpenAI (ChatGPT/Codex), Zhipu AI, Z.ai, Synthetic.new, Google Antigravity, and GitHub Copilot.",
         args: {},
         async execute() {
           // 1. 读取 auth.json
@@ -46,14 +47,21 @@ export const MyStatusPlugin: Plugin = async () => {
           }
 
           // 2. 并行查询所有平台（Google 不依赖 authData）
-          const [openaiResult, zhipuResult, zaiResult, googleResult, copilotResult] =
-            await Promise.all([
-              queryOpenAIUsage(authData.openai),
-              queryZhipuUsage(authData["zhipuai-coding-plan"]),
-              queryZaiUsage(authData["zai-coding-plan"]),
-              queryGoogleUsage(),
-              queryCopilotUsage(authData["github-copilot"]),
-            ]);
+          const [
+            openaiResult,
+            zhipuResult,
+            zaiResult,
+            syntheticResult,
+            googleResult,
+            copilotResult,
+          ] = await Promise.all([
+            queryOpenAIUsage(authData.openai),
+            queryZhipuUsage(authData["zhipuai-coding-plan"]),
+            queryZaiUsage(authData["zai-coding-plan"]),
+            querySyntheticUsage(authData.synthetic),
+            queryGoogleUsage(),
+            queryCopilotUsage(authData["github-copilot"]),
+          ]);
 
           // 3. 收集结果
           const results: string[] = [];
@@ -67,6 +75,9 @@ export const MyStatusPlugin: Plugin = async () => {
 
           // 处理 Z.ai 结果
           collectResult(zaiResult, t.zaiTitle, results, errors);
+
+          // 处理 Synthetic 结果
+          collectResult(syntheticResult, t.syntheticTitle, results, errors);
 
           // 处理 Google 结果
           collectResult(googleResult, t.googleTitle, results, errors);
