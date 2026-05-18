@@ -2,7 +2,7 @@
  * 共享类型定义
  *
  * [定位]: 被所有平台模块共享使用的类型
- * [同步]: openai.ts, zhipu.ts, google.ts, mystatus.ts
+ * [同步]: openai.ts, zhipu.ts, google.ts, anthropic.ts, mystatus.ts
  */
 
 // ============================================================================
@@ -26,6 +26,17 @@ export interface QueryResult {
  * OpenAI OAuth 认证数据
  */
 export interface OpenAIAuthData {
+  type: string;
+  access?: string;
+  refresh?: string;
+  expires?: number;
+}
+
+/**
+ * Anthropic Claude OAuth 认证数据
+ * 对应 auth.json 中的 "anthropic" 键
+ */
+export interface AnthropicAuthData {
   type: string;
   access?: string;
   refresh?: string;
@@ -98,6 +109,7 @@ export interface AntigravityAccountsFile {
  */
 export interface AuthData {
   openai?: OpenAIAuthData;
+  anthropic?: AnthropicAuthData;
   "zhipuai-coding-plan"?: ZhipuAuthData;
   "zai-coding-plan"?: ZhipuAuthData;
   "github-copilot"?: CopilotAuthData;

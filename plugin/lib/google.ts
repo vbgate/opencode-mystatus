@@ -78,13 +78,11 @@ const MODELS_TO_DISPLAY: ModelConfig[] = [
 ];
 
 // 获取 Antigravity 账号文件路径
+// Note: opencode always stores this file under ~/.config/opencode/ on all
+// platforms, including Windows. Using APPDATA on Windows was incorrect and
+// caused quota lookups to silently fail for Windows users.
 function getAntigravityAccountsPath(): string {
-  const home = homedir();
-  const configDir =
-    process.platform === "win32"
-      ? process.env.APPDATA || join(home, "AppData", "Roaming")
-      : join(home, ".config");
-  return join(configDir, "opencode", "antigravity-accounts.json");
+  return join(homedir(), ".config", "opencode", "antigravity-accounts.json");
 }
 
 const GOOGLE_TOKEN_REFRESH_URL = "https://oauth2.googleapis.com/token";

@@ -4,7 +4,7 @@
  * [输入]: ~/.local/share/opencode/auth.json 和 ~/.config/opencode/antigravity-accounts.json 中的认证信息
  * [输出]: 带进度条的额度使用情况展示
  * [定位]: 通过 mystatus 工具查询各账号额度
- * [同步]: lib/openai.ts, lib/zhipu.ts, lib/google.ts, lib/types.ts, lib/i18n.ts
+ * [同步]: lib/openai.ts, lib/zhipu.ts, lib/google.ts, lib/anthropic.ts, lib/types.ts, lib/i18n.ts
  */
 
 import { type Plugin, tool } from "@opencode-ai/plugin";
@@ -17,6 +17,7 @@ import { type AuthData, type QueryResult } from "./lib/types";
 import { queryOpenAIUsage } from "./lib/openai";
 import { queryZaiUsage, queryZhipuUsage } from "./lib/zhipu";
 import { queryGoogleUsage } from "./lib/google";
+import { queryAnthropicUsage } from "./lib/anthropic";
 import { queryCopilotUsage } from "./lib/copilot";
 
 // ============================================================================
@@ -28,7 +29,7 @@ export const MyStatusPlugin: Plugin = async () => {
     tool: {
       mystatus: tool({
         description:
-          "Query account quota usage for all configured AI platforms. Returns remaining quota percentages, usage stats, and reset countdowns with visual progress bars. Currently supports OpenAI (ChatGPT/Codex), Zhipu AI, Z.ai, Google Antigravity, and GitHub Copilot.",
+          "Query account quota usage for all configured AI platforms. Returns remaining quota percentages, usage stats, and reset countdowns with visual progress bars. Currently supports OpenAI (ChatGPT/Codex), Anthropic (Claude Pro/Max), Zhipu AI, Z.ai, Google Antigravity, and GitHub Copilot.",
         args: {},
         async execute() {
           // 1. 读取 auth.json
@@ -46,9 +47,10 @@ export const MyStatusPlugin: Plugin = async () => {
           }
 
           // 2. 并行查询所有平台（Google 不依赖 authData）
-          const [openaiResult, zhipuResult, zaiResult, googleResult, copilotResult] =
+          const [openaiResult, anthropicResult, zhipuResult, zaiResult, googleResult, copilotResult] =
             await Promise.all([
               queryOpenAIUsage(authData.openai),
+              queryAnthropicUsage(authData.anthropic),
               queryZhipuUsage(authData["zhipuai-coding-plan"]),
               queryZaiUsage(authData["zai-coding-plan"]),
               queryGoogleUsage(),
@@ -61,6 +63,9 @@ export const MyStatusPlugin: Plugin = async () => {
 
           // 处理 OpenAI 结果
           collectResult(openaiResult, t.openaiTitle, results, errors);
+
+          // 处理 Anthropic 结果
+          collectResult(anthropicResult, t.anthropicTitle, results, errors);
 
           // 处理智谱结果
           collectResult(zhipuResult, t.zhipuTitle, results, errors);
