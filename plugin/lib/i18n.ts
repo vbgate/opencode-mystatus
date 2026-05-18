@@ -4,7 +4,7 @@
  * [输入]: 系统语言环境
  * [输出]: 翻译函数和当前语言
  * [定位]: 被所有平台模块共享使用
- * [同步]: openai.ts, zhipu.ts, mystatus.ts, utils.ts
+ * [同步]: openai.ts, zhipu.ts, anthropic.ts, mystatus.ts, utils.ts
  */
 
 // ============================================================================
@@ -71,7 +71,7 @@ const translations = {
     tokenExpired:
       "⚠️ OAuth 授权已过期，请在 OpenCode 中使用一次 OpenAI 模型以刷新授权。",
     noAccounts:
-      "未找到任何已配置的账号。\n\n支持的账号类型:\n- OpenAI (Plus/Team/Pro 订阅用户)\n- 智谱 AI (Coding Plan)\n- Z.ai (Coding Plan)\n- Google Cloud (Antigravity)",
+      "未找到任何已配置的账号。\n\n支持的账号类型:\n- OpenAI (Plus/Team/Pro 订阅用户)\n- Anthropic (Claude Pro/Max)\n- 智谱 AI (Coding Plan)\n- Z.ai (Coding Plan)\n- Google Cloud (Antigravity)",
     queryFailed: "❌ 查询失败的账号:\n",
 
     // 平台标题
@@ -89,6 +89,18 @@ const translations = {
     zhipuAccountName: "Coding Plan",
     zaiAccountName: "Z.ai",
     noQuotaData: "暂无配额数据",
+
+    // Anthropic 相关
+    anthropicTitle: "## Anthropic 账号额度",
+    anthropicApiError: (status: number, text: string) =>
+      `Anthropic API 请求失败 (${status}): ${text}`,
+    anthropicTokenExpired:
+      "⚠️ Anthropic OAuth token 已过期且无 refresh token，请在 OpenCode 中重新登录 Anthropic。",
+    anthropicRefreshFailed:
+      "⚠️ Anthropic token 刷新失败，请在 OpenCode 中重新登录 Anthropic。",
+    anthropicFiveHourLimit: "5 小时限额",
+    anthropicSevenDayLimit: "7 天限额",
+    anthropicNoLimits: "(未检测到限额数据 — 可能是 API Key 订阅或无限制计划)",
 
     // Google 相关
     googleTitle: "## Google Cloud 账号额度",
@@ -149,7 +161,7 @@ const translations = {
     tokenExpired:
       "⚠️ OAuth token expired. Please use an OpenAI model in OpenCode to refresh authorization.",
     noAccounts:
-      "No configured accounts found.\n\nSupported account types:\n- OpenAI (Plus/Team/Pro subscribers)\n- Zhipu AI (Coding Plan)\n- Z.ai (Coding Plan)\n- Google Cloud (Antigravity)",
+      "No configured accounts found.\n\nSupported account types:\n- OpenAI (Plus/Team/Pro subscribers)\n- Anthropic (Claude Pro/Max)\n- Zhipu AI (Coding Plan)\n- Z.ai (Coding Plan)\n- Google Cloud (Antigravity)",
     queryFailed: "❌ Failed to query accounts:\n",
 
     // 平台标题
@@ -167,6 +179,18 @@ const translations = {
     zhipuAccountName: "Coding Plan",
     zaiAccountName: "Z.ai",
     noQuotaData: "No quota data available",
+
+    // Anthropic 相关
+    anthropicTitle: "## Anthropic Account Quota",
+    anthropicApiError: (status: number, text: string) =>
+      `Anthropic API request failed (${status}): ${text}`,
+    anthropicTokenExpired:
+      "⚠️ Anthropic OAuth token expired and no refresh token available. Re-authenticate Anthropic in OpenCode.",
+    anthropicRefreshFailed:
+      "⚠️ Anthropic token refresh failed. Re-authenticate Anthropic in OpenCode.",
+    anthropicFiveHourLimit: "5-hour limit",
+    anthropicSevenDayLimit: "7-day limit",
+    anthropicNoLimits: "(No rolling-window limits found — may be API key plan or unlimited)",
 
     // Google 相关
     googleTitle: "## Google Cloud Account Quota",
